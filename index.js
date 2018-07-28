@@ -13,7 +13,10 @@ var render = Render.create({
     element: document.body,
     engine: engine,
     options:{
-        showVelocity: true
+        // background: 'transparent',
+        background: '#222',
+        showVelocity: true,
+        wireframes: false
     }
 });
 
@@ -28,8 +31,13 @@ function generateCircles(){
     var circles = [];
 
     for (i = 0; i < numCircles; i++){
-        x_coord = Math.floor(Math.random() * 700);
-        y_coord = Math.floor(Math.random() * 500);
+        var x_coord = Math.floor(Math.random() * 700);
+        var y_coord = Math.floor(Math.random() * 500);
+
+        var fillColor = '#'+Math.floor(Math.random()*16777215).toString(16);
+        var strokeColor = '#'+Math.floor(Math.random()*16777215).toString(16);
+
+        console.log(fillColor);
 
         var ball = Bodies.circle(x_coord, y_coord, 30, {
           density: 0.04,
@@ -38,9 +46,9 @@ function generateCircles(){
           restitution: 1.0,
           inertia: Infinity,
           render: {
-            fillStyle: '#F35e66',
-            strokeStyle: 'green',
-            lineWidth: 1
+            fillStyle: fillColor,
+            strokeStyle: strokeColor,
+            lineWidth: 2
           }
         });
 
