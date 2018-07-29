@@ -69,13 +69,13 @@ engine.world.gravity.y = 0;
 Engine.run(engine);
 Render.run(render);
 
-// record circles
+// RECORD CANVAS
 let mediaRecorder;
 let recordedBlobs;
 
 const canvas = document.querySelector('canvas');
 
-const stream = canvas.captureStream(); 
+const stream = canvas.captureStream();
 console.log('Started stream capture from canvas element: ', stream);
 
 function handleDataAvailable(event) {
@@ -102,24 +102,38 @@ function stopRecording() {
 }
 
 function download() {
-  const blob = new Blob(recordedBlobs, {type: 'video/webm'});
-  const url = window.URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.style.display = 'none';
-  a.href = url;
-  a.download = 'test.webm';
-  document.body.appendChild(a);
-  a.click();
-  setTimeout(() => {
-    document.body.removeChild(a);
-    window.URL.revokeObjectURL(url);
-  }, 100);
+    const blob = new Blob(recordedBlobs, {type: 'video/webm'});
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.style.display = 'none';
+    a.href = url;
+    a.download = 'test_' + localStorage.getItem("sampleCount") + '.webm';
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(() => {
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
+    }, 100);
 }
 
-function stopAndDownload(){
+function stopAndDownload() {
+    if (!localStorage.getItem("sampleCount")){
+        localStorage.setItem("sampleCount", 0);
+        console.log(localStorage.getItem("sampleCount"));
+    } else {
+        previous_count = parseInt(localStorage.getItem("sampleCount"));
+        localStorage.setItem("sampleCount", previous_count + 1);
+        console.log(localStorage.getItem("sampleCount"));
+    }
+
     stopRecording();
     download();
+    setTimeout(refreshPage, 3000);
+}
+
+function refreshPage() {
+    window.location.reload();
 }
 
 startRecording();
-setTimeout(stopAndDownload, 5000);
+setTimeout(stopAndDownload, 6000);
