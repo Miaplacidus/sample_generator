@@ -37,8 +37,6 @@ function generateCircles(){
         var fillColor = '#'+Math.floor(Math.random()*16777215).toString(16);
         var strokeColor = '#'+Math.floor(Math.random()*16777215).toString(16);
 
-        console.log(fillColor);
-
         var ball = Bodies.circle(x_coord, y_coord, 30, {
           density: 0.04,
           friction: 0.00,
@@ -71,8 +69,60 @@ generateCircles();
 World.add(engine.world, [ground, ceiling, leftWall, rightWall]);
 engine.world.gravity.y = 0;
 
-// run the engine
 Engine.run(engine);
-
-// run the renderer
 Render.run(render);
+
+// record circles
+let mediaRecorder;
+let recordedBlobs;
+
+const canvas = document.querySelector('canvas');
+
+const stream = canvas.captureStream(); // frames per second
+console.log('Started stream capture from canvas element: ', stream);
+
+function handleDataAvailable(event) {
+  if (event.data && event.data.size > 0) {
+    recordedBlobs.push(event.data);
+  }
+}
+
+function startRecording() {
+  let options = { mimeType: 'video/webm' };
+  recordedBlobs = [];
+
+  mediaRecorder = new MediaRecorder(stream, options);
+
+  console.log('Created MediaRecorder', mediaRecorder, 'with options', options);
+  mediaRecorder.ondataavailable = handleDataAvailable;
+  mediaRecorder.start(100); // collect 100ms of data
+  console.log('MediaRecorder started', mediaRecorder);
+}
+
+function stopRecording() {
+  mediaRecorder.stop();
+  console.log('Recorded Blobs: ', recordedBlobs);
+}
+
+function download() {
+  const blob = new Blob(recordedBlobs, {type: 'video/webm'});
+  const url = window.URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.style.display = 'none';
+  a.href = url;
+  a.download = 'test.webm';
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(() => {
+    document.body.removeChild(a);
+    window.URL.revokeObjectURL(url);
+  }, 100);
+}
+
+function stopAndDownload(){
+    stopRecording();
+    download();
+}
+
+startRecording();
+setTimeout(stopAndDownload, 5000);
