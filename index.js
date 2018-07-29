@@ -5,10 +5,8 @@ var Engine = Matter.Engine,
     Body = Matter.Body,
     Bodies = Matter.Bodies;
 
-// create an engine
 var engine = Engine.create();
 
-// create a renderer
 var render = Render.create({
     element: document.body,
     engine: engine,
@@ -20,7 +18,6 @@ var render = Render.create({
     }
 });
 
-// create two boxes and a ground
 var ground = Bodies.rectangle(400, 600, 810, 40, { isStatic: true });
 var ceiling = Bodies.rectangle(400, 0, 810, 40, { isStatic: true });
 var leftWall = Bodies.rectangle(0, 120, 40, 1000, { isStatic: true });
@@ -78,7 +75,7 @@ let recordedBlobs;
 
 const canvas = document.querySelector('canvas');
 
-const stream = canvas.captureStream(); // frames per second
+const stream = canvas.captureStream(); 
 console.log('Started stream capture from canvas element: ', stream);
 
 function handleDataAvailable(event) {
