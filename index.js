@@ -13,7 +13,7 @@ var render = Render.create({
     options:{
         // background: 'transparent',
         background: '#222',
-        showVelocity: true,
+        showVelocity: false,
         wireframes: false
     }
 });
@@ -107,7 +107,7 @@ function download() {
     const a = document.createElement('a');
     a.style.display = 'none';
     a.href = url;
-    a.download = 'test_' + localStorage.getItem("sampleCount") + '.webm';
+    a.download = 'train_vid_' + localStorage.getItem("sampleCount") + '.webm';
     document.body.appendChild(a);
     a.click();
     setTimeout(() => {
