@@ -118,11 +118,11 @@ function download() {
 
 function stopAndDownload() {
     if (!localStorage.getItem("sampleCount")){
-        localStorage.setItem("sampleCount", 0);
+        localStorage.setItem("sampleCount", '000');
         console.log(localStorage.getItem("sampleCount"));
     } else {
         previous_count = parseInt(localStorage.getItem("sampleCount"));
-        localStorage.setItem("sampleCount", previous_count + 1);
+        localStorage.setItem("sampleCount", (previous_count + 1).toString().padStart(3, '0'));
         console.log(localStorage.getItem("sampleCount"));
     }
 
